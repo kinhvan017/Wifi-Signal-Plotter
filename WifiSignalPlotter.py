@@ -59,6 +59,7 @@ def update_plot(fig, ax, times, avg, err, interfaceDict):
 
 
 def get_data(t, times, avg, err, interfaceDict):
+    print("XX")
     dataArray = []
     for a in range(0, CONST_NUM_SAMPLES):    #  x in [beginning, end)
         m = read_data_from_cmd()
@@ -113,7 +114,7 @@ def get_data(t, times, avg, err, interfaceDict):
     err = np.append(err, errCurrent, axis=1)
 
     times = np.append(times, elapsed)
-
+    print(times, avg, err, interfaceDict)
     return times, avg, err, interfaceDict
 
 def read_data_from_cmd():
@@ -124,16 +125,17 @@ def read_data_from_cmd():
     else:
         raise Exception('reached else of if statement')
     out = p.stdout.read().decode()
+    print(out)
 
     if platform.system() == 'Linux':
-        m = re.findall('(wlan[0-9]+).*?Signal level=(-[0-9]+) dBm', out, re.DOTALL)
+        m = re.findall('(wlp[0-9]+).*?Signal level=(-[0-9]+) dBm', out, re.DOTALL)
     elif platform.system() == 'Windows':
         m = re.findall('Name.*?:.*?([A-z0-9 ]*).*?Signal.*?:.*?([0-9]*)%', out, re.DOTALL)
     else:
         raise Exception('reached else of if statement')
 
     p.communicate()
-
+    print(m)
     return m
 
 def sort_regex_results(m, interfaceDict):
